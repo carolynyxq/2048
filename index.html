@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>2048</title>
+  <link type="text/css" rel="stylesheet" href="./CSS/common.css"/>
+  <script src="./JS/animation.js"></script>
+  <script src="./JS/2048.js"></script>
+  
+ </head>
+ <body>
+  <p>SCORE:<span id="score"></span></p>
+  <div id="outerBox">
+	<!--第一行-->
+	<div id="r00" class="cell"></div>
+	<div id="r01" class="cell"></div>
+	<div id="r02" class="cell"></div>
+	<div id="r03" class="cell"></div>
+	
+	<!--第二行-->
+	<div id="r10" class="cell"></div>
+	<div id="r11" class="cell"></div>
+	<div id="r12" class="cell"></div>
+	<div id="r13" class="cell"></div>
+
+	<!--第三行-->
+	<div id="r20" class="cell"></div>
+	<div id="r21" class="cell"></div>
+	<div id="r22" class="cell"></div>
+	<div id="r23" class="cell"></div>
+	
+	<!--第四行-->
+	<div id="r30" class="cell"></div>
+	<div id="r31" class="cell"></div>
+	<div id="r32" class="cell"></div>
+	<div id="r33" class="cell"></div>
+
+	<!--前景单元格，用来存数字，负责移动-->
+	<div id="fc00" class="fcell"></div>
+	<div id="fc01" class="fcell"></div>
+	<div id="fc02" class="fcell"></div>
+	<div id="fc03" class="fcell"></div>
+
+	<div id="fc10" class="fcell"></div>
+	<div id="fc11" class="fcell"></div>
+	<div id="fc12" class="fcell"></div>
+	<div id="fc13" class="fcell"></div>
+
+	<div id="fc20" class="fcell"></div>
+	<div id="fc21" class="fcell"></div>
+	<div id="fc22" class="fcell"></div>
+	<div id="fc23" class="fcell"></div>
+
+	<div id="fc30" class="fcell"></div>
+	<div id="fc31" class="fcell"></div>
+	<div id="fc32" class="fcell"></div>
+	<div id="fc33" class="fcell"></div>
+  </div>
+  <div id="gameover">
+	<div id="cover"><!--透明背景--></div>
+	<div id="Info">
+		<span>游戏最终得分：</span><br/>
+		<span id="finalScore">mm</span>
+		<br/>
+		<button onclick="javascript:game.restart();">再来一次！</button>
+	</div>
+  </div>
+  <script>
+	game.start();
+	document.onkeydown=function(){
+		var evt=window.event||arguments[0];
+		if(game.status==game.PLAY){
+			if(evt.keyCode==37){
+				game.moveLeft();
+			}else if(evt.keyCode==39){
+				game.moveRight();
+			}else if(evt.keyCode==38){
+				game.moveUp();
+			}else if(evt.keyCode==40){
+				game.moveDown();
+			}
+			if(game.gameover()){
+				game.status=game.OVER;//修改游戏状态
+				//alert("GAME OVER");
+				//找到gameover元素，显示出来，修改得分值,计算#info的位置
+				var gameover=document.getElementById("gameover");
+				gameover.style.display="block";
+				var finalScore=document.getElementById("finalScore");
+				finalScore.textContent=game.score;
+				//#Info的定位问题
+				//left:（屏幕的宽度-div的宽度）/2
+				var box=document.getElementById("Info");
+				var boxCss=null;
+				if(box.currentStyle){
+					boxCss=box.currentStyle;
+				}else{
+					boxCss=getComputedStyle(box,null);
+				}
+				var w=parseInt(boxCss.width);
+				var h=parseInt(boxCss.height);
+				var screenW=screen.availWidth;
+				var screenH=window.innerHeight;
+				/****
+					scree.availWidth/screen.availHeight
+					window.innerWidth/window.innerHeight 浏览器内部款和高
+				***/
+				box.style.left=(screenW-w)/2+"px";
+				box.style.top=(screenH-h)/2+"px";
+			}
+		}
+	}
+  </script>
+ </body>
+</html>
